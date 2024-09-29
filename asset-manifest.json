@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/tp-react/static/css/main.f855e6bc.css",
-    "main.js": "/tp-react/static/js/main.2a90fe11.js",
+    "main.css": "/tp-react/static/css/main.51266ded.css",
+    "main.js": "/tp-react/static/js/main.293a2569.js",
     "static/js/453.ed3810f9.chunk.js": "/tp-react/static/js/453.ed3810f9.chunk.js",
-    "static/media/logo.svg": "/tp-react/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/tp-react/index.html",
-    "main.f855e6bc.css.map": "/tp-react/static/css/main.f855e6bc.css.map",
-    "main.2a90fe11.js.map": "/tp-react/static/js/main.2a90fe11.js.map",
+    "main.51266ded.css.map": "/tp-react/static/css/main.51266ded.css.map",
+    "main.293a2569.js.map": "/tp-react/static/js/main.293a2569.js.map",
     "453.ed3810f9.chunk.js.map": "/tp-react/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f855e6bc.css",
-    "static/js/main.2a90fe11.js"
+    "static/css/main.51266ded.css",
+    "static/js/main.293a2569.js"
   ]
 }
