@@ -3,45 +3,61 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import { v4 as uuidv4 } from "uuid";
-import { Button, IconButton, Menu, TextField } from "@mui/material";
-import { Add, MoreVert } from "@mui/icons-material";
+import { Button, IconButton, Menu, TextField, Typography } from "@mui/material";
+import { Add, MoreVert, Delete } from "@mui/icons-material";
 import { useState } from "react";
 import { CListCard } from "../CListCard";
+import { getContrastColor } from "../../utils";
 
 export const CDynamicTabs = () => {
   const [selectedTab, setSelectedTab] = useState();
+  const [tabToChange, setTabToChange] = useState();
+
   const [tabs, setTabs] = useState([
     {
       value: uuidv4(),
       label: "Lista 1",
-      color: "#000",
+      color: undefined,
       itemlist: [{ name: "Tomate", quantity: 23, isComplete: false }],
     },
     {
       value: uuidv4(),
       label: "Lista 2",
-      color: "#000",
-      itemlist: [{ name: "Zanangoria", quantity: 23, isComplete: false }],
+      color: undefined,
+      itemlist: [{ name: "Zanahoria", quantity: 23, isComplete: false }],
     },
     {
       value: uuidv4(),
       label: "Lista 3",
-      color: "#000",
-      itemlist: [{ name: "Limon", quantity: 23, isComplete: false }],
+      color: undefined,
+      itemlist: [{ name: "Limón", quantity: 23, isComplete: false }],
     },
     {
       value: uuidv4(),
       label: "Lista 4",
-      color: "#000",
-      itemlist: [{ name: "lechuga", quantity: 23, isComplete: false }],
+      color: undefined,
+      itemlist: [{ name: "Lechuga", quantity: 23, isComplete: false }],
     },
   ]);
 
-  const handleChange = (event, newValue) => {
-    setSelectedTab(newValue);
+  const handleChange = (event, newValue) => setSelectedTab(newValue);
+
+  const handleNameChange = (e) => {
+    if (e?.target.value)
+      setTabToChange((prev) => ({ ...prev, label: e.target.value }));
   };
 
-  const handleNameChange = (e) => {};
+  const handleColorChange = (e) => {
+    if (e?.target.value)
+      setTabToChange((prev) => ({ ...prev, color: e.target.value }));
+  };
+
+  const handleDeleteChange = () => {
+    setTabs((prev) => prev.filter((x) => x.value !== tabToChange.value));
+    setSelectedTab(null);
+
+    handleClose();
+  };
 
   const createNewTab = () => {
     const newValue = uuidv4();
@@ -58,10 +74,16 @@ export const CDynamicTabs = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event, tab) => {
+    setTabToChange(tab);
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
+    setTabs((prev) =>
+      prev.map((x) => (x.value === tabToChange.value ? tabToChange : x))
+    );
+    setTabToChange(null);
     setAnchorEl(null);
   };
 
@@ -72,19 +94,23 @@ export const CDynamicTabs = () => {
           <TabList variant="scrollable" onChange={handleChange}>
             {tabs.map((x) => (
               <Tab
+                key={x.value}
                 label={x.label}
                 value={x.value}
+                style={{
+                  backgroundColor: x.color,
+                  color: getContrastColor(x.color),
+                }}
                 iconPosition="end"
                 icon={
                   <IconButton
                     aria-label="more"
-                    id="long-button"
                     aria-controls={open ? "long-menu" : undefined}
                     aria-expanded={open ? "true" : undefined}
                     aria-haspopup="true"
-                    onClick={handleClick}
+                    onClick={(e) => handleClick(e, x)}
                   >
-                    <MoreVert />
+                    <MoreVert htmlColor={getContrastColor(x.color)} />
                   </IconButton>
                 }
               />
@@ -98,6 +124,7 @@ export const CDynamicTabs = () => {
           <CListCard selectedTab={tabs.find((x) => x.value === selectedTab)} />
         )}
       </TabContext>
+
       <Menu
         id="long-menu"
         anchorEl={anchorEl}
@@ -105,13 +132,47 @@ export const CDynamicTabs = () => {
         onClose={handleClose}
         slotProps={{
           paper: {
-            style: {
-              padding: 10,
-            },
+            style: { padding: 16, borderRadius: 8, width: 250 },
           },
         }}
       >
-        <TextField variant="standard" onChange={handleNameChange} />
+        <TextField
+          variant="outlined"
+          fullWidth
+          label="Nombre"
+          value={tabToChange?.label || ""}
+          onChange={handleNameChange}
+          sx={{ marginBottom: 2 }}
+        />
+
+        <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+          <Typography variant="body2" sx={{ marginRight: 2 }}>
+            Color:
+          </Typography>
+          <input
+            type="color"
+            value={tabToChange?.color || "#000000"}
+            onChange={handleColorChange}
+            style={{
+              width: "50px",
+              height: "36px",
+              border: "none",
+              cursor: "pointer",
+              borderRadius: "4px",
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+            }}
+          />
+        </Box>
+
+        <Button
+          variant="contained"
+          fullWidth
+          startIcon={<Delete />}
+          color="error"
+          onClick={handleDeleteChange}
+        >
+          Eliminar Lista
+        </Button>
       </Menu>
     </Box>
   );
