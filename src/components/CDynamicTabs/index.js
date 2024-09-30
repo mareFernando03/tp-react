@@ -13,32 +13,7 @@ export const CDynamicTabs = () => {
   const [selectedTab, setSelectedTab] = useState();
   const [tabToChange, setTabToChange] = useState();
 
-  const [tabs, setTabs] = useState([
-    {
-      value: uuidv4(),
-      label: "Lista 1",
-      color: undefined,
-      itemlist: [{ name: "Tomate", quantity: 23, isComplete: false }],
-    },
-    {
-      value: uuidv4(),
-      label: "Lista 2",
-      color: undefined,
-      itemlist: [{ name: "Zanahoria", quantity: 23, isComplete: false }],
-    },
-    {
-      value: uuidv4(),
-      label: "Lista 3",
-      color: undefined,
-      itemlist: [{ name: "Limón", quantity: 23, isComplete: false }],
-    },
-    {
-      value: uuidv4(),
-      label: "Lista 4",
-      color: undefined,
-      itemlist: [{ name: "Lechuga", quantity: 23, isComplete: false }],
-    },
-  ]);
+  const [tabs, setTabs] = useState([]);
 
   const handleChange = (event, newValue) => setSelectedTab(newValue);
 
@@ -66,7 +41,7 @@ export const CDynamicTabs = () => {
       {
         value: newValue,
         label: "Lista " + (prev.length + 1),
-        itemlist: [{ name: "Tomate", quantity: 23, isComplete: false }],
+        itemlist: [],
       },
     ]);
     setSelectedTab(newValue);
@@ -103,13 +78,7 @@ export const CDynamicTabs = () => {
                 }}
                 iconPosition="end"
                 icon={
-                  <IconButton
-                    aria-label="more"
-                    aria-controls={open ? "long-menu" : undefined}
-                    aria-expanded={open ? "true" : undefined}
-                    aria-haspopup="true"
-                    onClick={(e) => handleClick(e, x)}
-                  >
+                  <IconButton onClick={(e) => handleClick(e, x)}>
                     <MoreVert htmlColor={getContrastColor(x.color)} />
                   </IconButton>
                 }
@@ -121,7 +90,11 @@ export const CDynamicTabs = () => {
           </Button>
         </Box>
         {selectedTab && (
-          <CListCard selectedTab={tabs.find((x) => x.value === selectedTab)} />
+          <CListCard
+            selectedTab={tabs.find((x) => x.value === selectedTab)}
+            setTabs={setTabs}
+            tabs={tabs}
+          />
         )}
       </TabContext>
 
